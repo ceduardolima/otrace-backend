@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.celc.otrace.domain.User.Account;
+import com.celc.otrace.domain.User.User;
 import com.celc.otrace.domain.User.dtos.RegisterAccountDto;
 import com.celc.otrace.repositories.AccountRepository;
 import com.celc.otrace.repositories.UserRepository;
@@ -20,8 +21,9 @@ public class AuthService {
 
     public void register(RegisterAccountDto data) {
         var account = new Account(data);
-        userRepository.save(account.getUser());
-        accountRepository.save(account);
+        var savedAccount = accountRepository.save(account);
+        var user = new User(data, savedAccount);
+        userRepository.save(user);
     }
 
 }
