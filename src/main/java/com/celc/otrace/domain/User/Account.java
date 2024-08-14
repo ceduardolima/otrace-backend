@@ -1,6 +1,8 @@
 package com.celc.otrace.domain.User;
 
 
+import com.celc.otrace.domain.User.dtos.RegisterAccountDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,4 +34,10 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Account(RegisterAccountDto data) {
+        this.email = data.email();
+        this.password = data.password();
+        this.user = new User(null, data.name());
+    }
 }
