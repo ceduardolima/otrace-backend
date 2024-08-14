@@ -31,13 +31,9 @@ public class Account {
     private Long id;
     private String email;
     private String password;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Account(RegisterAccountDto data) {
         this.email = data.email();
         this.password = data.password();
-        this.user = new User(null, data.name());
     }
 }

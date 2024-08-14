@@ -1,9 +1,13 @@
 package com.celc.otrace.domain.User;
 
+import com.celc.otrace.domain.User.dtos.RegisterAccountDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -23,4 +27,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account Account;
+
+    public User(RegisterAccountDto data, Account account) {
+        this.name = data.name();
+    }
 }
