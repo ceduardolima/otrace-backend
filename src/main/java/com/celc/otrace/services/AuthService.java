@@ -1,5 +1,7 @@
 package com.celc.otrace.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,7 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public void register(RegisterAccountDto data) {
-        var account = new Account(data);
-        var savedAccount = accountRepository.save(account);
+        var savedAccount = accountRepository.save(new Account(data));
         var user = new User(data, savedAccount);
         userRepository.save(user);
     }

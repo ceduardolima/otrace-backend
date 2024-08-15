@@ -29,9 +29,10 @@ public class User {
     private String name;
     @OneToOne
     @JoinColumn(name = "account_id")
-    private Account Account;
+    private Account account;
 
     public User(RegisterAccountDto data, Account account) {
         this.name = data.name();
+        this.account = account;
     }
 }
