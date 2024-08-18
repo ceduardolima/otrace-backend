@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,21 +17,14 @@ import com.celc.otrace.domain.User.dtos.RegisterAccountDto;
 import com.celc.otrace.repositories.AccountRepository;
 import com.celc.otrace.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
-
 @Service
 public class AuthService {
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AuthenticationManager manager;
-
     @Autowired
     private PasswordEncoder encoder;
 
