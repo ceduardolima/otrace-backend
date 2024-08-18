@@ -3,6 +3,7 @@ package com.celc.otrace.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,17 +37,27 @@ public class AuthService {
     @Autowired
     private PasswordEncoder encoder;
 
-    public void register(RegisterAccountDto data) {
-        var savedAccount = accountRepository.save(new Account(null, data.email(), encoder.encode(data.password())));
-        var user = new User(data, savedAccount);
-        userRepository.save(user);
+    public User register(RegisterAccountDto data) {
+        var account = tryRegisterAccount(data);
+        var user = new User(data, account);
+        return userRepository.save(user);
+    }
+
+    private Account tryRegisterAccount(RegisterAccountDto data) {
+        try {
+            final var accountBuffer = Account.newAccount(data.email(), encoder.encode(data.password()));
+            return accountRepository.save(accountBuffer);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
     }
 
     public User login(LoginDto data) {
         var user = userRepository.findByAccountEmail(data.email())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid email or password"));
         boolean passwordMatch = encoder.matches(data.password(), user.getAccount().getPassword());
-        if (!passwordMatch) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid email or password");
+        if (!passwordMatch)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid email or password");
         return user;
     }
 }
