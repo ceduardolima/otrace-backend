@@ -27,6 +27,8 @@ public class AuthService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private TokenService tokenService;
 
     public User register(RegisterAccountDto data) {
         var account = tryRegisterAccount(data);
@@ -50,5 +52,9 @@ public class AuthService {
         if (!passwordMatch)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid email or password");
         return user;
+    }
+
+    public String genToken(Account account) {
+        return tokenService.genToken(account);
     }
 }

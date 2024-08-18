@@ -19,7 +19,7 @@ public class TokenService {
 
     static private final String ISSUER = "OTrace";
 
-    private String genToken(Account account) {
+    public String genToken(Account account) {
         try {
             return JWT.create()
             .withIssuer(ISSUER)

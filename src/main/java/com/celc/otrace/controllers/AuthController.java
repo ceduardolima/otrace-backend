@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.celc.otrace.domain.User.dtos.AuthenticatedUserDto;
 import com.celc.otrace.domain.User.dtos.LoginDto;
 import com.celc.otrace.domain.User.dtos.RegisterAccountDto;
 import com.celc.otrace.services.AuthService;
@@ -35,8 +36,9 @@ public class AuthController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity login(@RequestBody @Valid LoginDto data) {
-        authService.login(data);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AuthenticatedUserDto> login(@RequestBody @Valid LoginDto data) {
+        var user = authService.login(data);
+        String token = authService.genToken(user.getAccount());
+        return ResponseEntity.ok(new AuthenticatedUserDto(user, token));
     }
 }

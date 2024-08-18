@@ -35,4 +35,8 @@ public class User {
         this.name = data.name();
         this.account = account;
     }
+
+    public String getEmail() {
+        return account.getEmail();
+    }
 }
