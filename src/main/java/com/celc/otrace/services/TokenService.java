@@ -3,6 +3,7 @@ package com.celc.otrace.services;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,4 +42,7 @@ public class TokenService {
         return LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-03:00"));
     }
 
+    public String getSubject(String token) {
+        return JWT.decode(token).getSubject();
+    }
 }
