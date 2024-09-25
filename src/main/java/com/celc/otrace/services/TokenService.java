@@ -3,7 +3,8 @@ package com.celc.otrace.services;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,10 +40,14 @@ public class TokenService {
     }
 
     public Instant expirationDate() {
-        return LocalDateTime.now().plusMinutes(15).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 
     public String getSubject(String token) {
-        return JWT.decode(token).getSubject();
+        try {
+            return JWT.require(algorithm()).withIssuer(ISSUER).build().verify(token).getSubject();
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Error during token validation: ");
+        }
     }
 }
